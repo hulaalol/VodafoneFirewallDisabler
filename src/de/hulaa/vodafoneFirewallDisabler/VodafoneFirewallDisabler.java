@@ -1,14 +1,19 @@
 package de.hulaa.vodafoneFirewallDisabler;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.zip.ZipException;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.devtools.v101.console.Console;
 import org.openqa.selenium.support.ui.Select;
 
@@ -50,7 +55,16 @@ public class VodafoneFirewallDisabler {
 		} else {
 			driverFile = "chromedriver";
 		}
-		System.setProperty("webdriver.chrome.driver", ("src/de/hulaa/vodafoneFirewallDisabler/" + driverFile));
+		
+		File driver = null;
+		try {
+			driver = ResourceLoader.getDriverFile(driverFile);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		System.setProperty("webdriver.chrome.driver", driver.getAbsolutePath()); 
 		return new ChromeDriver();
 	}
 
