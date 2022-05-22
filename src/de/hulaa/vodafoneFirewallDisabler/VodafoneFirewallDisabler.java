@@ -50,10 +50,17 @@ public class VodafoneFirewallDisabler {
 	public static ChromeDriver init() {
 		String os = Utils.getOS();
 		String driverFile;
+		
+		ChromeOptions options = new ChromeOptions();
+
 		if (os.toLowerCase().contains("windows")) {
 			driverFile = "chromedriver.exe";
 		} else {
 			driverFile = "chromedriver";
+			options.addArguments("--disable-extensions"); // disabling extensions
+			options.addArguments("--disable-dev-shm-usage"); // overcome limited resource problems
+			options.addArguments("--no-sandbox"); // Bypass OS security model
+			options.addArguments("--headless");
 		}
 		
 		File driver = null;
@@ -65,7 +72,7 @@ public class VodafoneFirewallDisabler {
 		}
 		
 		System.setProperty("webdriver.chrome.driver", driver.getAbsolutePath()); 
-		return new ChromeDriver();
+		return new ChromeDriver(options);
 	}
 
 	public static void disableFirewall(String routerURL, String user, String password) throws InterruptedException {
